@@ -17,7 +17,6 @@ ChatBot::ChatBot()
     _rootNode = nullptr;
 }
 
-// constructor WITH memory allocation
 ChatBot::ChatBot(std::string filename)
 {
     std::cout << "ChatBot Constructor" << std::endl;
@@ -37,13 +36,52 @@ ChatBot::~ChatBot()
     {
         _image = nullptr;
     }
+
+    if(_chatLogic != nullptr){
+        _chatLogic = nullptr;
+    }
+
+    if(_rootNode != nullptr) {
+        _rootNode = nullptr;
+    }
+
 }
 
-//// STUDENT CODE
-////
+ChatBot::ChatBot(const ChatBot& other) {
+    std::cout << "ChatBot Copy Constructor" << std::endl;
+    _chatLogic = other._chatLogic;
+    _rootNode = other._rootNode;
+    _image = std::unique_ptr<wxBitmap>(std::move(other._image.get()));
+}
 
-////
-//// EOF STUDENT CODE
+ChatBot::ChatBot(ChatBot&& other) {
+    std::cout << "ChatBot Move Constructor" << std::endl;
+    _chatLogic = std::move(other._chatLogic);
+    other._chatLogic = nullptr;
+    _rootNode = std::move(other._rootNode);
+    other._rootNode = nullptr;
+    _image = std::unique_ptr<wxBitmap>(std::move(other._image.get()));
+    other._image = nullptr;
+}
+
+ChatBot& ChatBot::operator=(const ChatBot& other) {
+    std::cout << "ChatBot Copy Assignment Operator" << std::endl;
+   _chatLogic = other._chatLogic;
+    _rootNode = other._rootNode;
+    _image = std::unique_ptr<wxBitmap>(std::move(other._image.get()));
+    return *this;
+}
+
+ChatBot& ChatBot::operator=(ChatBot&& other) {
+    std::cout << "ChatBot Move Assignment Operator" << std::endl;
+    _chatLogic = std::move(other._chatLogic);
+    other._chatLogic = nullptr;
+    _rootNode = std::move(other._rootNode);
+    other._rootNode = nullptr;
+    _image = std::unique_ptr<wxBitmap>(std::move(other._image.get()));
+    other._image = nullptr;
+    return *this;
+}
 
 void ChatBot::ReceiveMessageFromUser(std::string message)
 {
